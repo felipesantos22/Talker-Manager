@@ -3,6 +3,7 @@ package com.talker.manager;
 import com.talker.manager.model.Talker;
 import com.talker.manager.repository.TalkerRepository;
 import com.talker.manager.service.TalkerService;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,33 +14,31 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
-public class TestTalkerService {
+public class TestFindByIdServiceTalker {
 
   @Autowired
   TalkerService talkerService;
+
   @MockBean
   TalkerRepository talkerRepository;
-
   @Test
-  public void testCreateTalker() {
+  public void testFindById(){
     Talker talker = new Talker();
+    talker.setId(UUID.randomUUID());
     talker.setName("Felipe");
     talker.setAge(33L);
 
-    Talker talkerToReturn = new Talker();
-    talkerToReturn.setId(UUID.randomUUID());
-    talkerToReturn.setName(talker.getName());
-    talkerToReturn.setAge(talker.getAge());
+    Mockito.when(talkerRepository.findById(ArgumentMatchers.eq(talker.getId())))
+        .thenReturn(Optional.of(talker));
 
-    Mockito.when(talkerRepository.save(ArgumentMatchers.any(Talker.class)))
-        .thenReturn(talkerToReturn);
+    Optional<Talker> returnedTalker = talkerService.findById(talker.getId());
 
-    Talker saveTalker = talkerService.createService(talker);
+    Mockito.verify(talkerRepository).findById(ArgumentMatchers.eq(talker.getId()));
 
-    Mockito.verify(talkerRepository).save(ArgumentMatchers.any(Talker.class));
+    Assertions.assertEquals(returnedTalker.get().getId(), talker.getId());
+    Assertions.assertEquals(returnedTalker.get().getName(), talker.getName());
+    Assertions.assertEquals(returnedTalker.get().getAge(), talker.getAge());
 
-    Assertions.assertEquals(talkerToReturn.getId(), saveTalker.getId());
-    Assertions.assertEquals(talker.getName(), saveTalker.getName());
-    Assertions.assertEquals(talker.getAge(), saveTalker.getAge());
   }
+
 }
