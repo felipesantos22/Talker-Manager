@@ -28,6 +28,23 @@ public class TalkerService {
     return talkerRepository.findById(uuid);
   }
 
+  public Optional<Talker> updateService(UUID uuid, Talker talker){
+    return talkerRepository.findById(uuid)
+        .map(record -> {
+          record.setName(talker.getName());
+          record.setAge(talker.getAge());
+          return talkerRepository.save(record);
+        });
+  }
+
+  public Optional<Talker> deleteService(UUID uuid){
+    return talkerRepository.findById(uuid).map(record -> {
+      talkerRepository.deleteById(uuid);
+      return record;
+    });
+  }
+
+
 
 
 }
