@@ -39,7 +39,7 @@ public class TestPostTalkerService {
     Mockito.verify(talkerRepository).save(ArgumentMatchers.any(Talker.class));
 
     Assertions.assertEquals(talkerToReturn.getId(), saveTalker.getId());
-    Assertions.assertEquals(talker.getName(), saveTalker.getName());
-    Assertions.assertEquals(talker.getAge(), saveTalker.getAge());
+    Assertions.assertEquals(talkerToReturn.getName(), saveTalker.getName());
+    Assertions.assertEquals(talkerToReturn.getAge(), saveTalker.getAge());
   }
 }

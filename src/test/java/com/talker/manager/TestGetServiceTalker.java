@@ -24,6 +24,7 @@ public class TestGetServiceTalker {
 
     Talker talker1 = new Talker(UUID.randomUUID(),"Felipe",32L);
     Talker talker2 = new Talker(UUID.randomUUID(),"Felipe",32L);
+
     List<Talker> talkers = Arrays.asList(talker1,talker2);
 
     Mockito.when(talkerRepository.findAll()).thenReturn(talkers);
