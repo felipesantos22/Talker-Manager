@@ -2,10 +2,12 @@ package com.talker.manager.controller;
 
 import com.talker.manager.model.User;
 import com.talker.manager.service.UserService;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,10 +42,32 @@ public class UserController {
   }
 
   @GetMapping(path = {"/{id}"})
-  public ResponseEntity<?> findById(@PathVariable UUID id) {
+  public ResponseEntity<?> findById(@PathVariable Long id) {
     return service.findByIdUser(id)
         .map(record -> ResponseEntity.status(HttpStatus.OK).body(record))
         .orElse(ResponseEntity.notFound().build());
 
   }
+
+  @GetMapping(path = {"/email/{email}"})
+  public Optional<User> findByName(@PathVariable String email) {
+    return service.findEmail(email);
+  }
+
+  @GetMapping(path = {"/date/{localDate}"})
+  public List<User> local(@PathVariable LocalDate localDate) {
+    return service.localDateUser(localDate);
+  }
+
+  @DeleteMapping(path = {"/{id}"})
+  public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    Optional<User> optionalUser = service.deleteUser(id);
+    if (optionalUser.isPresent()) {
+      return ResponseEntity.ok().body("Usúario deletado!");
+    } else {
+      return ResponseEntity.ok().body("Usúario deletado!");
+    }
+  }
+
+
 }

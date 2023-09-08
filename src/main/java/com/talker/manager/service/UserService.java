@@ -2,6 +2,7 @@ package com.talker.manager.service;
 
 import com.talker.manager.model.User;
 import com.talker.manager.repository.UserRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,8 +28,23 @@ public class UserService {
     return repository.findAll();
   }
 
-  public Optional<User> findByIdUser(UUID id) {
+  public Optional<User> findByIdUser(Long id) {
     return repository.findById(id);
+  }
+
+  public Optional<User> findEmail(String email) {
+    return repository.findByEmail(email);
+  }
+
+  public List<User> localDateUser(LocalDate date) {
+    return repository.findByStart(date);
+  }
+
+  public Optional<User> deleteUser(Long id) {
+    return repository.findById(id).map(record -> {
+      repository.deleteById(id);
+      return record;
+    });
   }
 
 }
